@@ -42,7 +42,7 @@ def readGroups(account):
     return groups
 
 
-print(gr+'[+] Choose a group to scrape members :'+re)
+print(gr+'Choose a group to scrape members :'+re)
 i = 0
 groups = readGroups(s.accounts[0])
 for group in groups:
@@ -50,16 +50,16 @@ for group in groups:
     i += 1
 
 print('')
-g_index = input(gr+"[+] Enter a Number : "+re)
+g_index = input(gr+"Enter a Number : "+re)
 target_group = groups[int(g_index)]
 
-print(gr+'[+] Fetching Members...')
+print(gr+'Fetching Members...')
 time.sleep(1)
 all_participants = []
 all_participants = s.accounts[0].client.get_participants(
     target_group, aggressive=True)
 
-print(gr+'[+] Saving In file...')
+print(gr+'Saving In file...')
 time.sleep(1)
 with open("members.csv", "w", encoding='UTF-8') as f:
     writer = csv.writer(f, delimiter=",", lineterminator="\n")
@@ -81,4 +81,4 @@ with open("members.csv", "w", encoding='UTF-8') as f:
         name = (first_name + ' ' + last_name).strip()
         writer.writerow([username, user.id, user.access_hash,
                         name, target_group.title, target_group.id])
-print(gr+'[+] Members scraped successfully.')
+print(gr+'Members scraped successfully.')
