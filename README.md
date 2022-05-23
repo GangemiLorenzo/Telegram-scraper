@@ -41,3 +41,13 @@ python move.py members.csv
 
 Follow the istruction and the script will start moving users using the accounts you provided.
 The accounts will rotate to avoid flooding error in Telegram API.
+
+## Limitations
+
+1. Due to a bug within Telethon scraping groups bigger than 5000 members can
+lead to internal errors.
+
+2. Only accounts with a defined username can be moved
+
+3. An error message will be printed if a user has a policy preference which prevents him/her to be added to 
+a group
