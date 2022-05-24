@@ -8,7 +8,7 @@ from telethon.errors.rpcerrorlist import (PeerFloodError,
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerChannel, InputPeerEmpty, InputPeerUser
-from preferences import user_add_delay, adding_error_delay, FLOOD_ERROR_DELAY
+from preferences import user_add_delay, adding_error_delay, FLOOD_ERROR_DELAY, MAX_USERS_MOVED
 import session as s
 from utils import *
 
@@ -103,11 +103,11 @@ wait(2)
 
 for user in users:
     count += 1
-    if count > 20:
+    if count > MAX_USERS_MOVED:
         index += 1
         if index == len(s.accounts):
             index = 0
-        print(string_painter("Change from " + account.toString() +
+        print(string_painter("\nChanging from " + account.toString() +
               " --> " + s.accounts[index].toString(), cyano))
         count = 0
     print('Count: ' + str(count))

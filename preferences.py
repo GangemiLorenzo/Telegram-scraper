@@ -20,3 +20,9 @@ adding_error_delay = {
 # the script wait when an error occurs
 # The default is 200 seconds
 FLOOD_ERROR_DELAY = 200
+
+
+# This configuration variable specifies how many users
+# an account can add before it is switched to the next
+# one in the list
+MAX_USERS_MOVED = 20
