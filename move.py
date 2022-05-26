@@ -1,13 +1,14 @@
 import csv
 import random
 import sys
+import os
 
 from telethon.errors.rpcerrorlist import (PeerFloodError,
                                           UserPrivacyRestrictedError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerChannel, InputPeerEmpty, InputPeerUser
-
+from preferences import user_add_delay, adding_error_delay, FLOOD_ERROR_DELAY, MAX_USERS_MOVED
 import session as s
 from utils import *
 
@@ -20,7 +21,7 @@ class User:
         self.name = name
 
     def toString(self):
-        return (cy + 'Utente: ' + self.username + " | ID: " + str(self.id))
+        return (string_painter('User: ' + self.username + " | ID: " + str(self.id), cyano))
 
 
 def readGroups(account):
@@ -46,17 +47,19 @@ def readGroups(account):
 
 
 if s.init():
-    print(cy + 'Numero account operativi: ' + str(s.n))
+    print(string_painter('Number of operative accounts: ' + str(s.n), cyano))
 else:
-    print(re + 'L\'inizializzazione degli account è fallita')
+    print(string_painter('User initialization failed', red))
     exit(1)
 
 try:
-    print(cy+'Lettura del file: ' + sys.argv[1])
+    if os.path.exists("./members.csv") and len(sys.argv) == 1:
+        sys.argv.append("./members.csv")
+    print(string_painter('File reading: ' + sys.argv[1], cyano))
     input_file = sys.argv[1]
 except Exception as e:
     logError(e)
-    print(re+'Devi specificare il nome del file da cui prelevare gli account.')
+    print(string_painter('You must specify the filename containing the users to add.', red))
     exit(1)
 
 users = []
@@ -70,42 +73,42 @@ try:
             user = User(row[0], int(row[1]), int(row[2]), row[3])
             users.append(user)
 except Exception as e:
-    logError('Possibile errore nel CSV riga ' + str(count))
+    logError('Possible errors within the CSV row ' + str(count))
     logError(e)
     exit(1)
 
-print(gr+'Lettura del file avvenuta con successo!')
-print(cy + str(len(users)) + ' utenti da spostare\n')
+print(string_painter('Successful file reading!', green))
+print(string_painter(str(len(users)) + ' users to move\n', cyano))
 
 
-print(cy+'ATTENZIONE!\nPer ogni Account va selezionato lo stesso gruppo.')
+print(string_painter('PAY ATTENTION!\nFor each account the same group must be selected.', cyano))
 for a in s.accounts:
-    print(cy+a.toString())
+    print(string_painter(a.toString(), cyano))
     i = 0
     groups = readGroups(a)
     for group in groups:
-        print(gr+'['+cy+str(i)+gr+']'+cy+' - '+group.title)
+        print(string_painter("[" + str(i) + "]" + ' - ' + group.title, green, cyano))
         i += 1
 
-    print(cy+'Seleziona il gruppo a cui aggiungere gli utenti')
-    g_index = input(cy+"Scegli un numero: ")
+    print(string_painter('Select the group where the users have to be added', cyano))
+    g_index = input(string_painter("Choose a number: ", cyano))
     target_group = groups[int(g_index)]
     a.channell = InputPeerChannel(target_group.id, target_group.access_hash)
-    print(cy+'-----------------\n')
+    print(string_painter('-----------------\n', cyano))
 
 index = 0
 count = 0
 
-wait(10)
+wait(2)
 
 for user in users:
     count += 1
-    if count > 20:
+    if count > MAX_USERS_MOVED:
         index += 1
         if index == len(s.accounts):
             index = 0
-        print(cy+"Cambio da " + account.toString() +
-              " --> " + s.accounts[index].toString())
+        print(string_painter("\nChanging from " + account.toString() +
+              " --> " + s.accounts[index].toString(), cyano))
         count = 0
     print('Count: ' + str(count))
     account = s.accounts[index]
@@ -115,33 +118,33 @@ for user in users:
         if user.username == "":
             continue
         user_to_add = client.get_input_entity(user.username)
-        #user_to_add = InputPeerUser(user.id, user.access_hash)
+        #user_to_add = InputPeerUser(user.id, client.get_entity(user.id).access_hash)
         client(InviteToChannelRequest(account.channell, [user_to_add]))
         logMovedSuccess(user.username)
-        print(gr+"Utente aggiunto con successo! " + account.toString())
-        wait(random.randrange(60, 65))
+        print(string_painter("User added successfully! " + account.toString(), green))
+        wait(random.randrange(user_add_delay["min"], user_add_delay["max"]))
     except PeerFloodError as err:
         logMovedFailure(user.username)
         index += 1
         if index == len(s.accounts):
             index = 0
-        print(re+"ATTENZIONE FLOOD ERROR!!!\nCambio da " +
-              account.toString() + " --> " + s.accounts[index].toString())
-        count == 0
-        wait(900)
+        print(string_painter("ATTENZION FLOOD ERROR!!!\nSwitch from " +
+              account.toString() + " --> " + s.accounts[index].toString(), red))
+        count = 0
+        wait(FLOOD_ERROR_DELAY)
     except UserPrivacyRestrictedError as err:
         logMovedFailure(user.username)
-        print(re+"Le impostazioni di privacy dell'utente non permettono l'aggiunta.")
-        wait(random.randrange(60, 65))
+        print(string_painter("The user privacy setting prevents from adding him/her to the group.", red))
+        wait(random.randrange(adding_error_delay["min"], adding_error_delay["max"]))
     except Exception as err:
         logMovedFailure(user.username)
-        print(re+"Errore non gestito.")
+        print(string_painter("Unmanaged error.", red))
         logError(err)
         index += 1
         if index == len(s.accounts):
             index = 0
-        print(cy+"Cambio da " + account.toString() +
-              " --> " + s.accounts[index].toString())
-        count == 0
-        wait(random.randrange(60, 65))
+        print(string_painter("Switch from " + account.toString() +
+              " --> " + s.accounts[index].toString(), cyano))
+        count = 0
+        wait(random.randrange(adding_error_delay["min"], adding_error_delay["max"]))
     continue

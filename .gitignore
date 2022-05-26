@@ -3,3 +3,7 @@
 *.csv
 *.log
 .config
+telegram/
+tel/
+.idea/
+*.session-journal

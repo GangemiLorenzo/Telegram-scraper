@@ -27,17 +27,43 @@ Run the scraper
 python scraper.py
 ```
 
-Chose a group from which extract the members by writing the corresponding number, when prompted.
-
-After that a file `members.csv` will be created.
+It will ask you to choose the source group from will users have to be scraped.
+Then it collects all the extracted members within the file `members.csv`.
 
 ## Move
 
 Run the mover
 
 ```bash
+python move.py 
+```
+The default source file it will use to add users is `members.csv`, but you can also specify a different file:
+```bash
 python move.py members.csv
 ```
 
 Follow the istruction and the script will start moving users using the accounts you provided.
-The accounts will rotate to avoid flooding error in Telegram API.
+
+The account in charge to add users to the group will be rotated each 20 users, in order to avoid flooding error in Telegram API.
+You can also change this default number within the file `preferences.py`
+
+Extraction:
+```
+# This configuration variable specifies how many users
+# an account can add before it is switched to the next
+# one in the list
+MAX_USERS_MOVED = 20
+```
+
+
+## Limitations
+
+1. You need to be admin of the destination PUBLIC group (the one where users will be added)
+
+2. Due to a bug within Telethon scraping groups bigger than 5000 members can
+lead to internal errors.
+
+3. Only accounts with a defined username can be moved
+
+4. An error message will be printed if a user has a policy preference which prevents him/her to be added to 
+a group

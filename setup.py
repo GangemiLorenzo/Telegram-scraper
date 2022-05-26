@@ -1,34 +1,43 @@
 import os
 import sys
 import time
-
+import platform
+import subprocess
 from utils import *
 
 
 def banner():
-    os.system('clear')
-    print(f"""
-	{re}Benvenuto nell'installazione di telegram scraper 
-	""")
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system('clear')
+    print("""
+    Welcome within the telegram scraper installation 
+    """)
 
 
 def requirements():
     banner()
-    print(re+"> Sto installando le dipendenze ...")
-    os.system("""
-		pip3 install telethon requests configpars
-		python3 -m pip install telethon requests configparser
-		""")
-    banner()
-    print(re+"> Sto installando le dipendenze ...")
-    print(re+"> Le dipendenze sono state installate.\n")
+    print(string_painter("> I'm installing the dependencies ...", red))
+    if platform.system() == "Windows":
+        py_path = "python3"
+    else:
+        if os.environ.get("VIRTUAL_ENV"):
+            py_path = os.path.join(os.environ.get("VIRTUAL_ENV"), "python3")
+        else:
+            py_path = "python3"
+
+    subprocess.call(f"{py_path} -m pip install -r requirements.txt", shell=True)
+    #banner()
+    #print(string_painter("> I'm installing the dependencies ...", red))
+    print(string_painter("> Dependencies have been installed.\n", red))
 
 
 def config_setup():
     import configparser
     cpass = configparser.RawConfigParser()
     cpass.add_section('info')
-    n = input(gr+"> Quanti account vuoi configurare: "+cy)
+    n = input(string_painter("> How many account do you want to configure: ", green, cyano))
     if not n.isnumeric():
         config_setup()
         return
@@ -41,27 +50,27 @@ def config_setup():
         print("> Account n." + str(i+1))
         cred = 'cred' + str(i)
         cpass.add_section(cred)
-        xnome = input(gr+"> Inserisci il NOME: "+cy)
+        xnome = input(string_painter("> Provide NAME: ", green, cyano))
         cpass.set(cred, 'nome', xnome)
-        xid = input(gr+"> Inserisci l'ID: "+cy)
+        xid = input(string_painter("> Provide ID: ", green, cyano))
         cpass.set(cred, 'id', xid)
-        xhash = input(gr+"> Inserisci l'HASH: "+cy)
+        xhash = input(string_painter("> Provide HASH: ", green, cyano))
         cpass.set(cred, 'hash', xhash)
-        xphone = input(gr+"> Inserisci il numero di telefono: "+cy)
+        xphone = input(string_painter("> Provide phone number: ", green, cyano))
         cpass.set(cred, 'phone', xphone)
         setup = open('.config', 'w')
         cpass.write(setup)
     setup.close()
-    print(re+"> Credenziali salvate.")
+    print(string_painter("> Saved credentials.", red))
 
 
 def help():
-    print(gr+"""$ python3 setup.py -m file1.csv file2.csv
+    print(string_painter("""$ python3 setup.py -m file1.csv file2.csv
 
-	( --config  / -c ) Permette di configurare gli account
-	( --install / -i ) Installa le dipendenze
-	( --help    / -h ) Mostra questo messaggio
-			""")
+    ( --config  / -c ) Allows to configure the accounts
+    ( --install / -i ) Install the dependecies
+    ( --help    / -h ) Show this message
+        """), green)
 
 
 try:
@@ -72,10 +81,11 @@ try:
     elif any([sys.argv[1] == '--help', sys.argv[1] == '-h']):
         help()
     else:
-        print(re+'\nArgomento non supportato : ' + sys.argv[1])
-        print(gr+'Per aiuto utilizza: ')
+
+        print(string_painter('\nThe provided argument is not supported: ' + sys.argv[1], red))
+        print(string_painter('If you need help use: ', green))
         print('$ python3 setup.py -h')
 except IndexError:
-    print(re+'Nessun argomento specificato.')
-    print(gr+'Per aiuto utilizza: ')
+    print(string_painter('No argument provided.', red))
+    print(string_painter('If you need help use: ', green))
     print('$ python3 setup.py -h')

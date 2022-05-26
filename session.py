@@ -35,7 +35,7 @@ def checkAuth(account):
         if not account.client.is_user_authorized():
             account.client.send_code_request(account.phone)
             account.client.sign_in(account.phone, input(
-                gr+'Inserisci il codice ricevuto da '+account.nome+' su Telegram: '+cy))
+                string_painter('Insert code received from '+account.nome+' on Telegram: ', green, cyano)))
         return True
     except Exception as e:
         logError(e)
@@ -56,10 +56,9 @@ def init():
             if checkAuth(account):
                 accounts[i] = account
             else:
-                print(re + "Client " + str(i+1) +
-                      " ha fallito l'autenticazione!")
+                print(string_painter("Client " + str(i+1) + " failed authentication!", red))
                 return False
-            print(gr + accounts[i].toString() + " autenticato!")
+            print(string_painter(accounts[i].toString() + " authenticated!", green))
     except Exception as e:
         logError(e)
         return False
