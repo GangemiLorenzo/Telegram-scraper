@@ -106,9 +106,9 @@ def time_user_filter(user, seconds_time_delta=0):
     try:
         user_was_online = user.status.was_online
     except:
-        if seconds_time_delta < 0:
-            return True
-        return False
+        if seconds_time_delta > 0:
+            return False
+        return True
 
     user_time_diff = now - user_was_online.replace(tzinfo=None)
 
@@ -123,7 +123,7 @@ def time_user_filter(user, seconds_time_delta=0):
 
 
 def user_filter0(user):
-    return time_user_filter(user=user, seconds_time_delta=0)
+    return time_user_filter(user=user)
 
 
 def user_filter1(user):
