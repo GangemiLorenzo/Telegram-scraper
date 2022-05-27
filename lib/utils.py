@@ -1,9 +1,8 @@
+import datetime
 import logging
-import os
+import platform
 import sys
 import time
-import datetime
-import platform
 
 red = "\033[1;31m"
 green = "\033[1;32m"

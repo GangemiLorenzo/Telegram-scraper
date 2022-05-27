@@ -4,6 +4,7 @@ from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
+from constants import CONFIG
 from utils import *
 
 
@@ -21,7 +22,7 @@ class Account:
 
 
 cpass = configparser.RawConfigParser()
-cpass.read('.config')
+cpass.read(CONFIG)
 n = int(cpass['info']['n'])
 accounts = [None]*n
 
