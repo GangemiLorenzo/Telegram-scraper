@@ -1,8 +1,9 @@
 import os
-import sys
-import time
 import platform
 import subprocess
+import sys
+
+from constants import CONFIG, REQUIREMENTS
 from utils import *
 
 
@@ -27,7 +28,7 @@ def requirements():
         else:
             py_path = "python3"
 
-    subprocess.call(f"{py_path} -m pip install -r requirements.txt", shell=True)
+    subprocess.call(f"{py_path} -m pip install -r {REQUIREMENTS}", shell=True)
     #banner()
     #print(string_painter("> I'm installing the dependencies ...", red))
     print(string_painter("> Dependencies have been installed.\n", red))
@@ -58,7 +59,7 @@ def config_setup():
         cpass.set(cred, 'hash', xhash)
         xphone = input(string_painter("> Provide phone number: ", green, cyano))
         cpass.set(cred, 'phone', xphone)
-        setup = open('.config', 'w')
+        setup = open(CONFIG, 'w')
         cpass.write(setup)
     setup.close()
     print(string_painter("> Saved credentials.", red))

@@ -1,5 +1,3 @@
-
-
 # This range specify how many seconds should
 # the script wait between one user add and the next
 # The default is between 40 and 50 seconds

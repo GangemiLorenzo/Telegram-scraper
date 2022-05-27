@@ -1,15 +1,17 @@
 import csv
+import os
 import random
 import sys
-import os
 
 from telethon.errors.rpcerrorlist import (PeerFloodError,
                                           UserPrivacyRestrictedError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerChannel, InputPeerEmpty, InputPeerUser
-from preferences import user_add_delay, adding_error_delay, FLOOD_ERROR_DELAY, MAX_USERS_MOVED
+
 import session as s
+from preferences import (FLOOD_ERROR_DELAY, MAX_USERS_MOVED,
+                         adding_error_delay, user_add_delay)
 from utils import *
 
 

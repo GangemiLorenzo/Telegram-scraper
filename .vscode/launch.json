@@ -8,7 +8,7 @@
             "name": "Setup: requirements",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/setup.py",
+            "program": "${workspaceFolder}/lib/setup.py",
             "console": "integratedTerminal",
             "args" : ["-i"],
             "presentation": {
@@ -20,7 +20,7 @@
             "name": "Setup: configure",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/setup.py",
+            "program": "${workspaceFolder}/lib/setup.py",
             "console": "integratedTerminal",
             "args" : ["-c"],
             "presentation": {
@@ -32,9 +32,8 @@
             "name": "Scraper",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/scraper.py",
+            "program": "${workspaceFolder}/lib/scraper.py",
             "console": "integratedTerminal",
-            "args" : ["-c"],
             "presentation": {
                 "group": "Scraper"
             }
@@ -43,9 +42,8 @@
             "name": "Mover",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/move.py",
+            "program": "${workspaceFolder}/lib/move.py",
             "console": "integratedTerminal",
-            "args" : ["-c"],
             "presentation": {
                 "group": "Mover"
             }
