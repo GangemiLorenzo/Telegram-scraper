@@ -1,8 +1,4 @@
 import configparser
-import csv
-import os
-import sys
-import time
 
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
