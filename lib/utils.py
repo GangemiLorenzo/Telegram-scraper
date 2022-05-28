@@ -102,13 +102,15 @@ def define_user_filter(choise):
 
 
 def time_user_filter(user, seconds_time_delta=0):
+    if seconds_time_delta == 0:
+        return True
     now = datetime.datetime.now()
     try:
         user_was_online = user.status.was_online
     except:
-        if seconds_time_delta > 0:
-            return False
-        return True
+        if seconds_time_delta < 0:
+            return True
+        return False
 
     user_time_diff = now - user_was_online.replace(tzinfo=None)
 
