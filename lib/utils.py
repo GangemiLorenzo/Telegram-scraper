@@ -117,8 +117,6 @@ def time_user_filter(user, seconds_time_delta=0):
     if seconds_time_delta < 0:
         if user_time_diff.seconds > abs(seconds_time_delta):
             return True
-    elif seconds_time_delta == 0:
-        return True
     elif user_time_diff.seconds < seconds_time_delta:
         return True
     return False
