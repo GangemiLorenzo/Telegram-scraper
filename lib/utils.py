@@ -102,6 +102,8 @@ def define_user_filter(choise):
 
 
 def time_user_filter(user, seconds_time_delta=0):
+    if seconds_time_delta == 0:
+        return True
     now = datetime.datetime.now()
     try:
         user_was_online = user.status.was_online
@@ -123,7 +125,7 @@ def time_user_filter(user, seconds_time_delta=0):
 
 
 def user_filter0(user):
-    return time_user_filter(user=user, seconds_time_delta=0)
+    return time_user_filter(user=user)
 
 
 def user_filter1(user):
